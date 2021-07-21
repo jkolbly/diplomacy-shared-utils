@@ -644,4 +644,4 @@
     }
   
   }
-})(typeof exports === "undefined" ? this["mymodule"] = {} : exports);
+})(typeof exports === "undefined" ? this.shared = {} : exports);
