@@ -1,7 +1,7 @@
 /**
  * Information about a game
  */
-let GameData = class {
+class GameData {
   constructor(jsonString) {
     /** @type {MapInfo} */
     this.mapInfo;
@@ -644,6 +644,6 @@ let GameData = class {
 
 }
 
-if (typeof(module) !== "undefined") {
-  module.exports.GameData = GameData;
+if (typeof(exports) !== "undefined") {
+  exports.GameData = GameData;
 }
