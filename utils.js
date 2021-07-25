@@ -120,11 +120,8 @@ class GameData {
     return this.users.filter(user => !Object.values(this.players).includes(user));
   }
 
+  /** Return True if the country group given in `countryList` has yet to be chosen. */
   country_group_unclaimed(countryList) {
-    /**
-    Return True if the country group given in `countrList` has yet to be chosen
-      */
-  
       return this.country_group_owner(countryList) === "";
   }
 
