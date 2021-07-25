@@ -57,38 +57,6 @@ class GameData {
   }
 
   /**
-   * Create a new gamedata object with the updated data from the server for this game
-   * 
-   * @param {Function} newDataCallback
-   */
-  update_game(newDataCallback) {
-    get_game_async(this.id, newDataCallback);
-  }
-
-  /**
-   * Create an Order object from a JSON order provided by the server.
-   * @param {Object} order 
-   * @returns {Order}
-   */
-  order_from_imported(order) {
-    switch (order.type) {
-      case orderTypeEnum.hold:
-        return new HoldOrder(this.get_unit(order.unit), this);
-      case orderTypeEnum.move:
-        return new MoveOrder(this.get_unit(order.unit), { province: order.province, coast: order.coast }, this, order.isconvoy);
-      case orderTypeEnum["support hold"]:
-        return new SupportHoldOrder(this.get_unit(order.unit), this.get_unit(order.supporting), this);
-      case orderTypeEnum["support move"]:
-        return new SupportMoveOrder(this.get_unit(order.unit), this.get_unit(order.from), order.supporting, this);
-      case orderTypeEnum.convoy:
-        return new ConvoyOrder(this.get_unit(order.unit), order.start, order.end, this);
-      default:
-        console.log("Unrecognized order type: " + order.type);
-        return order;
-    }
-  }
-
-  /**
    * Return whether `order` is a selected order for any player
    * @param {Order} order
    * @returns {boolean}
@@ -209,87 +177,6 @@ class GameData {
 
   country_names(countryList) {
     return countryList.map(country => this.get_country(country).name);
-  }
-
-  claim_countries(countryList, successFunc, failFunc) {
-    let data = countryList.length > 0 ? {"country": countryList.join(",")} : {};
-    $.post(
-      this.url_string(2),
-      data,
-      result => {
-        if (result === "true") {
-          successFunc();
-        } else {
-          failFunc(result);
-        }
-      }
-    );
-  }
-
-  unclaim_countries(successFunc, failFunc) {
-    this.claim_countries({}, successFunc, failFunc);
-  }
-
-  delete_game(successFunc, failFunc) {
-    if (confirm("Are you sure you want to delete this game?\nThis cannot be undone and people may be mad...")) {
-      $.post(
-        this.url_string(3),
-        result => {
-          if (result == "true") {
-            successFunc();
-          } else {
-            failFunc(result);
-          }
-        }
-      );
-    }
-  }
-
-  /**
-   * Submit a list of orders with a single request (type 8)
-   * @param {Array.<Order>} orders 
-   * @param {Function} successFunc
-   * @param {Function} failFunc
-   */
-  submit_orders(orders, successFunc, failFunc) {
-    this.submit_simple_orders(orders.map((order) => order.simplify()), successFunc, failFunc);
-  }
-
-  /**
-   * Submit a list of simple orders (orders pre-processed for submission) with a single request (type 8)
-   * @param {Array.<Object>} simpleorders 
-   * @param {Function} successFunc
-   * @param {Function} failFunc
-   */
-  submit_simple_orders(simpleorders, successFunc, failFunc) {
-    $.ajax({
-      type: "POST",
-      url: this.url_string(8),
-      data: JSON.stringify({ orders: simpleorders }),
-      success: (result) => {
-        if (result == "true") {
-          successFunc();
-        } else {
-          failFunc(result);
-        }
-      },
-      contentType: "application/json; charset=utf-8",
-      dataType: "text"
-    });
-  }
-
-  /**
-   * Unsubmit orders for a list of provinces with a single request (type 8 with -1 as order type).
-   * @param {Array.<string>} provinces 
-   * @param {Function} successFunc
-   * @param {Function} failFunc
-   */
-  unsubmit_orders(provinces, successFunc, failFunc) {
-    this.submit_simple_orders(provinces.map((p) => { return { type: orderTypeEnum.cancel, unit: p }; }), successFunc, failFunc);
-  }
-
-  url_string(requestType) {
-    return "diplomacy.php?type=" + requestType + "&id=" + this.id;
   }
 
   /**
@@ -552,16 +439,6 @@ class GameData {
       }
     }
     return null;
-  }
-
-  unit_element(unit, country, parent) {
-    let holder = $("<div>").addClass("unit-icon-holder").addClass("cursor-pointer");
-
-    let svg = import_svg(unit_to_image(unit.type), this.country_color(country), "", unit_to_classname(unit.type) + " unit-icon", holder);
-
-    parent.append(holder);
-  
-    return holder;
   }
 
   get_province(id) {
