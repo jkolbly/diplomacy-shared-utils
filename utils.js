@@ -122,7 +122,7 @@ class GameData {
 
   /** Return True if the country group given in `countryList` has yet to be chosen. */
   country_group_unclaimed(countryList) {
-      return this.country_group_owner(countryList) === "";
+    return this.country_group_owner(countryList) === "";
   }
 
   unclaimed_country_groups() {
