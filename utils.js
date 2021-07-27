@@ -89,12 +89,6 @@ class GameData {
       for (let [id, country] of Object.entries(gameState.nations)) {
         country.id = id;
       }
-
-      for (let nation in gameState.orders) {
-        for (let province in gameState.orders[nation]) {
-          gameState.orders[nation][province] = this.order_from_imported(gameState.orders[nation][province]);
-        }
-      }
     }
 
     /** @type {Object.<string,Array.<Order>>} */
