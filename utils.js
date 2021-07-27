@@ -52,6 +52,34 @@
  */
 
 /**
+ * The state of a game at a given turn
+ * @typedef {Object} State
+ * @property {number} date
+ * @property {seasonEnum} season
+ * @property {Object.<string, Country>} nations
+ * @property {phaseEnum} phase
+ * @property {Object.<string, Adjustment>} adjustments Disband/build orders for the creating/disbanding phase
+ * @property {Object.<string, Object.<string, Order>>} orders Keys are nation id's. Values are objects mapping provinces to selected orders
+ * @property {Object.<string, Retreat>} retreats Retreat orders for the retreat phase
+ */
+
+/**
+ * A single country with state information
+ * @typedef {Object} Country
+ * @property {string} id
+ * @property {Array.<string>} supplyCenters
+ * @property {Array.<Unit>} units
+ */
+
+/**
+ * A single unit
+ * @typedef {Object} Unit
+ * @property {string} province
+ * @property {string} coast
+ * @property {unitTypeEnum} type
+ */
+
+/**
  * Information about a game
  */
 class GameData {
