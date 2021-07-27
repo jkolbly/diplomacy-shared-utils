@@ -1,4 +1,61 @@
 /**
+ * Enum for storing unit types
+ * @readonly
+ * @enum {number}
+ */
+ const unitTypeEnum = {
+  Army: 0,
+  Fleet: 1
+}
+
+/**
+ * Enum for storing game phases
+ * @readonly
+ * @enum {number}
+ */
+const phaseEnum = {
+  "Country Claiming": -1,
+  "Order Writing": 0,
+  "Retreating": 1,
+  "Creating/Disbanding": 2,
+  "Finished": 3
+}
+
+/**
+ * Enum for storing seasons
+ * @readonly
+ * @enum {number}
+ */
+const seasonEnum = {
+  Spring: 0,
+  Fall: 1
+}
+
+/**
+ * Enum for storing unit types
+ * @readonly
+ * @enum {number}
+ */
+const orderTypeEnum = {
+  // To cancel an order (any phase)
+  cancel: -1,
+
+  // Order Writing Phase
+  hold: 0,
+  move: 1,
+  "support hold": 2,
+  "support move": 3,
+  convoy: 4,
+
+  // Retreating Phase
+  retreat: 5,
+
+  // Creating/Disbanding phase
+  disband: 6,
+  build: 7
+}
+
+/**
  * Information about a map alone
  * @typedef {Object} MapInfo
  * @property {Array.<Route>} routes
@@ -567,4 +624,8 @@ class GameData {
 
 if (typeof(exports) !== "undefined") {
   exports.GameData = GameData;
+  exports.phaseEnum = phaseEnum;
+  exports.seasonEnum = seasonEnum;
+  exports.unitTypeEnum = unitTypeEnum;
+  exports.orderTypeEnum = orderTypeEnum;
 }
