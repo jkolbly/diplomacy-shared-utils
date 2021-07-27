@@ -1,4 +1,57 @@
 /**
+ * Information about a map alone
+ * @typedef {Object} MapInfo
+ * @property {Array.<Route>} routes
+ * @property {Array.<Province>} provinces
+ * @property {Array.<MapCountry>} countries
+ * @property {Object.<number, {eliminate: Array.<string>, combine: Array.<string>, neutralEliminate: boolean}>} playerConfigurations
+ * @property {{date: number, name: string, image: string, toWin: number}} info
+ */
+
+/**
+ * A single route connecting two provinces
+ * @typedef {Object} Route
+ * @property {string} p0 The first province
+ * @property {string} p1 The second province
+ * @property {string} c0 The first coast
+ * @property {string} c1 The second coast
+ * @property {boolean} water Whether this is a route for fleets
+ */
+
+/**
+ * A single province
+ * @typedef {Object} Province
+ * @property {string} name
+ * @property {string} id
+ * @property {number} x 0 for the left side of the map, 1 for the right side
+ * @property {number} y 0 for the bottom of the map, 1 for the top
+ * @property {number} startUnit 0 for no unit, 1 for an army, 2 for a fleet
+ * @property {boolean} supplyCenter Whether there is a supply center in this province
+ * @property {boolean} water
+ * @property {Array.<Coast>} coasts
+ * @property {string} transparency Relative path to transparency image file
+ */
+
+/**
+ * A single coast within a province
+ * @typedef {Object} Coast
+ * @property {string} name
+ * @property {string} id
+ * @property {number} x 0 for the left side of the map, 1 for the right side
+ * @property {number} y 0 for the bottom of the map, 1 for the top
+ * @property {boolean} frigateStart Whether this is the starting position for a fleet
+ */
+
+/**
+ * A single country described by the map
+ * @typedef {Object} MapCountry
+ * @property {string} name
+ * @property {string} id The ISO alpha-3 name for this country
+ * @property {string} color The hex representation of this country's color
+ * @property {Array.<string>} supplyCenters This country's starting supply centers
+ */
+
+/**
  * Information about a game
  */
 class GameData {
