@@ -2,7 +2,7 @@
  * Information about a game
  */
 class GameData {
-  constructor(jsonString) {
+  constructor(json) {
     /** @type {MapInfo} */
     this.mapInfo;
     /**
@@ -30,7 +30,7 @@ class GameData {
     /** @type {Array} */
     this.chats;
 
-    Object.assign(this, JSON.parse(jsonString));
+    Object.assign(this, json);
 
     for (let gameState of this.history) {
       for (let [id, country] of Object.entries(gameState.nations)) {
