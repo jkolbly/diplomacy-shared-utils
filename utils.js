@@ -175,9 +175,6 @@ class GameData {
         country.id = id;
       }
     }
-
-    /** @type {Object.<string,Array.<Order>>} */
-    this.orderCache = {};
   }
 
   /**
