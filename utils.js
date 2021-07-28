@@ -1,4 +1,15 @@
 /**
+ * Enum for storing the current win state of the game
+ * @readonly
+ * @enum {number}
+ */
+const winStateEnum = {
+  Playing: 0,
+  Draw: 1,
+  Won: 2
+}
+
+/**
  * Enum for storing unit types
  * @readonly
  * @enum {number}
@@ -643,6 +654,7 @@ class GameData {
 
 if (typeof(exports) !== "undefined") {
   exports.GameData = GameData;
+  exports.winStateEnum = winStateEnum;
   exports.phaseEnum = phaseEnum;
   exports.seasonEnum = seasonEnum;
   exports.unitTypeEnum = unitTypeEnum;
