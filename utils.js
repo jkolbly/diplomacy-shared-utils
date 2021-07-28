@@ -61,7 +61,7 @@ const orderTypeEnum = {
  * @property {Array.<Route>} routes
  * @property {Array.<Province>} provinces
  * @property {Array.<MapCountry>} countries
- * @property {Object.<number, {eliminate: Array.<string>, combine: Array.<string>, neutralEliminate: boolean}>} playerConfigurations
+ * @property {Object.<string, {eliminate: Array.<string>, combine: Array.<string>, neutralEliminate: boolean}>} playerConfigurations
  * @property {{date: number, name: string, image: string, toWin: number}} info
  */
 
