@@ -3,7 +3,7 @@
  * @readonly
  * @enum {number}
  */
- const unitTypeEnum = {
+const unitTypeEnum = {
   Army: 0,
   Fleet: 1
 }
