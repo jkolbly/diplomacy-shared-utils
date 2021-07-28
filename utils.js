@@ -72,8 +72,16 @@ const orderTypeEnum = {
  * @property {Array.<Route>} routes
  * @property {Array.<Province>} provinces
  * @property {Array.<MapCountry>} countries
- * @property {Object.<string, {eliminate: Array.<string>, combine: Array.<string>, neutralEliminate: boolean}>} playerConfigurations
+ * @property {Object.<string, PlayerConfiguration>} playerConfigurations
  * @property {{date: number, name: string, image: string, toWin: number}} info
+ */
+
+/**
+ * A single player configuration
+ * @typedef {Object} PlayerConfiguration
+ * @property {string[]} eliminate
+ * @property {string[][]} combine
+ * @property {boolean} neutralEliminate Whether the eliminated countries still have neutral units on the board.
  */
 
 /**
