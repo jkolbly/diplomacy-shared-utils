@@ -169,12 +169,6 @@ class GameData {
     this.chats;
 
     Object.assign(this, json);
-
-    for (let gameState of this.history) {
-      for (let [id, country] of Object.entries(gameState.nations)) {
-        country.id = id;
-      }
-    }
   }
 
   /**
