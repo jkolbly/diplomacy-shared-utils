@@ -135,6 +135,7 @@ const orderTypeEnum = {
  * A single country with state information
  * @typedef {Object} Country
  * @property {string} id
+ * @property {boolean} neutral
  * @property {Array.<string>} supplyCenters
  * @property {Array.<Unit>} units
  */
