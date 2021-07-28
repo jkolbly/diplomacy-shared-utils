@@ -154,10 +154,7 @@ class GameData {
   constructor(json) {
     /** @type {MapInfo} */
     this.mapInfo;
-    /**
-     * 0 for game still playing, 1 for draw, 2 for finished with a winner
-     * @type {number}
-     */
+    /** @type {winStateEnum} */
     this.won;
     /** @type {string} */
     this.winner;
