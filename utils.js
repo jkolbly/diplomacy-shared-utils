@@ -173,8 +173,6 @@ class GameData {
     this.history;
     /** @type {Array.<string>} */
     this.users;
-    /** @type {Array} */
-    this.chats;
 
     Object.assign(this, json);
   }
