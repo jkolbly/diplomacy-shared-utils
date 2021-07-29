@@ -184,6 +184,10 @@ class GameData {
     this.users;
 
     Object.assign(this, json);
+
+    this.mapInfo.provinces = this.mapInfo.provinces.filter(p => !this.eliminatedProvinces.includes(p.id));
+    this.mapInfo.countries = this.mapInfo.countries.filter(c => this.state.nations[c]);
+    this.mapInfo.routes = this.mapInfo.routes.filter(r => !this.eliminatedProvinces.includes(r.p0) && !this.eliminatedProvinces.includes(r.p1));
   }
 
   /**
@@ -192,6 +196,21 @@ class GameData {
    */
   get state() {
     return this.history[this.history.length - 1];
+  }
+
+  /**
+   * A list of province ID's that are eliminated from the game.
+   * Value gets cached.
+   * @returns {string[]}
+   */
+  get eliminatedProvinces() {
+    Object.defineProperty(this, "eliminatedProvinces", { value: [] });
+    if (!this.playerConfig.neutralEliminate) {
+      for (let country of this.playerConfig.eliminate) {
+        this.eliminatedProvinces.push(...this.get_country(country).supplyCenters);
+      }
+    }
+    return this.eliminatedProvinces;
   }
 
   /**
