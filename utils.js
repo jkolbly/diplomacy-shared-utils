@@ -199,6 +199,14 @@ class GameData {
   }
 
   /**
+   * The player configuration being used
+   * @returns {shared.PlayerConfiguration}
+   */
+  get playerConfig() {
+    return this.mapInfo.playerConfigurations[this.users.length.toString()];
+  }
+
+  /**
    * A list of province ID's that are eliminated from the game.
    * Value gets cached.
    * @returns {string[]}
