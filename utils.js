@@ -200,7 +200,7 @@ class GameData {
 
   /**
    * The player configuration being used
-   * @returns {shared.PlayerConfiguration}
+   * @type {shared.PlayerConfiguration}
    */
   get playerConfig() {
     return this.mapInfo.playerConfigurations[this.users.length.toString()];
@@ -209,7 +209,7 @@ class GameData {
   /**
    * A list of province ID's that are eliminated from the game.
    * Value gets cached.
-   * @returns {string[]}
+   * @type {string[]}
    */
   get eliminatedProvinces() {
     Object.defineProperty(this, "eliminatedProvinces", { value: [] });
