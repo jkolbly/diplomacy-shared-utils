@@ -330,6 +330,11 @@ class GameData {
     return this.get_country(countryList[0]).color;
   }
 
+  /**
+   * Get the country group containing a country as an array of country ID's.
+   * @param {string} countryId 
+   * @returns {string[]}
+   */
   country_group(countryId) {
     return this.playableCountryGroups.find(group => group.includes(countryId));
   }
