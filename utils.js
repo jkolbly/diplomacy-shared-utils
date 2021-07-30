@@ -200,7 +200,7 @@ class GameData {
 
   /**
    * The player configuration being used
-   * @type {shared.PlayerConfiguration}
+   * @type {PlayerConfiguration}
    */
   get playerConfig() {
     return this.mapInfo.playerConfigurations[this.users.length.toString()];
