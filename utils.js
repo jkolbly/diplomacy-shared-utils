@@ -324,8 +324,10 @@ class GameData {
   }
 
   /**
-  Return the color of the first country in a country group
-  */
+   * Return the color of the first country in a country group
+   * @param {string[]} countryList
+   * @returns {string} Hex color
+   */
   country_group_color(countryList) {
     return this.get_country(countryList[0]).color;
   }
