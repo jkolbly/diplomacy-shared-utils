@@ -222,6 +222,22 @@ class GameData {
   }
 
   /**
+   * A list of country groups as an array of arrays of ID's.
+   * Value gets cached.
+   * @type {string[][]}
+   */
+  get playableCountryGroups() {  
+    let ungrouped = this.mapInfo.countries.map(c => c.id).filter(id => !this.playerConfig.eliminate.includes(id));
+
+    let groups = this.playerConfig.combine;
+    groups.forEach(rule => { ungrouped = ungrouped.filter(c => !rule.includes(c)); });
+    groups = groups.concat(ungrouped.map(c => c));
+  
+    Object.defineProperty(this, "playableCountryGroups", { value: groups.concat(ungrouped.map(c => [c])) });
+    return this.playableCountryGroups;
+  }
+
+  /**
    * Return whether `order` is a selected order for any player
    * @param {Order} order
    * @returns {boolean}
@@ -291,26 +307,7 @@ class GameData {
   }
 
   unclaimed_country_groups() {
-    return this.playable_country_groups().filter(group => this.country_group_unclaimed(group));
-  }
-
-  playable_country_groups() {
-    let playerConfig = this.mapInfo.playerConfigurations[this.users.length];
-  
-    let ungrouped = [];
-    for (let country of this.mapInfo.countries) {
-      if (!playerConfig.eliminate.includes(country.id)) {
-        ungrouped.push(country.id);
-      }
-    }
-
-    let groups = [];
-    for (let rule of playerConfig.combine) {
-      ungrouped = ungrouped.filter(c => !rule.includes(c));
-      groups.push(rule);
-    }
-  
-    return groups.concat(ungrouped.map(c => [c]));
+    return this.playableCountryGroups.filter(group => this.country_group_unclaimed(group));
   }
 
   /** @param {string} country */
@@ -334,7 +331,7 @@ class GameData {
   }
 
   country_group(countryId) {
-    return this.playable_country_groups().find(group => group.includes(countryId));
+    return this.playableCountryGroups.find(group => group.includes(countryId));
   }
 
   country_names(countryList) {
