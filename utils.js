@@ -186,7 +186,7 @@ class GameData {
     Object.assign(this, json);
 
     this.mapInfo.provinces = this.mapInfo.provinces.filter(p => !this.eliminatedProvinces.includes(p.id));
-    this.mapInfo.countries = this.mapInfo.countries.filter(c => this.state.nations[c]);
+    this.mapInfo.countries = this.mapInfo.countries.filter(c => Object.keys(this.state.nations).includes(c.id));
     this.mapInfo.routes = this.mapInfo.routes.filter(r => !this.eliminatedProvinces.includes(r.p0) && !this.eliminatedProvinces.includes(r.p1));
   }
 
