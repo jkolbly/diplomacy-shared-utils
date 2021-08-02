@@ -670,7 +670,7 @@ class GameData {
       for (let unit of this.state.nations[c].units) {
         if (unit.province != province && unit.province != exclude) {
           for (let order of this.get_valid_orders(unit)) {
-            if (order.type == "move" && order.province == province) {
+            if (order.type == orderTypeEnum.move && order.dest == province) {
               ret.push(unit);
               break;
             }
