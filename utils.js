@@ -207,6 +207,18 @@ class Order {
 }
 
 /**
+ * Class representing an order to cancel existing orders.
+ */
+class CancelOrder extends Order {
+  /**
+   * @param {string} province Province ID of unit to cancel orders for.
+   */
+  constructor(province) {
+    super(orderTypeEnum.cancel, province, `cancel-${province}`);
+  }
+}
+
+/**
  * Class representing an order to hold.
  */
 class HoldOrder extends Order {
@@ -370,6 +382,9 @@ function import_order(imported) {
   };
 
   switch (imported.type) {
+    case orderTypeEnum.cancel:
+      requireKeys(["unit"]);
+      return new CancelOrder(imported.unit);
     case orderTypeEnum.hold:
       requireKeys(["unit"]);
       return new HoldOrder(imported.unit);
@@ -922,6 +937,7 @@ if (typeof(exports) !== "undefined") {
   exports.orderTypeEnum = orderTypeEnum;
   exports.import_order = import_order;
   exports.Order = Order;
+  exports.CancelOrder = CancelOrder;
   exports.HoldOrder = HoldOrder;
   exports.MoveOrder = MoveOrder;
   exports.ConvoyOrder = ConvoyOrder;
