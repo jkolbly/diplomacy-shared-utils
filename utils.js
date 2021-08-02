@@ -325,7 +325,7 @@ class SupportHoldOrder extends Order {
 
   export() {
     return {
-      ...super.export,
+      ...super.export(),
       supporting: this.supporting
     };
   }
