@@ -910,4 +910,10 @@ if (typeof(exports) !== "undefined") {
   exports.unitTypeEnum = unitTypeEnum;
   exports.orderTypeEnum = orderTypeEnum;
   exports.import_order = import_order;
+  exports.Order = Order;
+  exports.HoldOrder = HoldOrder;
+  exports.MoveOrder = MoveOrder;
+  exports.ConvoyOrder = ConvoyOrder;
+  exports.SupportHoldOrder = SupportHoldOrder;
+  exports.SupportMoveOrder = SupportMoveOrder;
 }
