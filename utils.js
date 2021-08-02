@@ -354,6 +354,43 @@ class SupportMoveOrder extends Order {
 }
 
 /**
+ * Create an {@link Order} object from a simplified order object sent from the client, server, or SQL server.
+ * @param {{type:number,unit:string,province?:string,coast?:string,isconvoy?:boolean,start?:string,end?:string,supporting?:string,from?:string}} imported 
+ * @returns {Order}
+ */
+function import_order(imported) {
+  let keys = Object.keys(imported);
+  /** @param {string[]} required */
+  let requireKeys = required => {
+    for (let key of required) {
+      if (!keys.includes(key)) {
+        throw Error(`Order of type ${imported.type} must include property ${key}.`);
+      }
+    }
+  };
+
+  switch (imported.type) {
+    case orderTypeEnum.hold:
+      requireKeys(["unit"]);
+      return new HoldOrder(imported.unit);
+    case orderTypeEnum.move:
+      requireKeys(["unit", "province"]);
+      return new MoveOrder(imported.unit, imported.province, keys.includes("coast") ? imported.coast : "", keys.includes("isconvoy") && imported.isconvoy);
+    case orderTypeEnum.convoy:
+      requireKeys(["unit", "start", "end"]);
+      return new ConvoyOrder(imported.unit, imported.start, imported.end);
+    case orderTypeEnum["support hold"]:
+      requireKeys(["unit", "supporting"]);
+      return new SupportHoldOrder(imported.unit, imported.supporting);
+    case orderTypeEnum["support move"]:
+      requireKeys(["unit", "supporting", "from"]);
+      return new SupportMoveOrder(imported.unit, imported.supporting, imported.from);
+    default:
+      throw Error(`${imported.type} is not a valid order type.`);
+  }
+}
+
+/**
  * Information about a game
  */
 class GameData {
@@ -872,4 +909,5 @@ if (typeof(exports) !== "undefined") {
   exports.seasonEnum = seasonEnum;
   exports.unitTypeEnum = unitTypeEnum;
   exports.orderTypeEnum = orderTypeEnum;
+  exports.import_order = import_order;
 }
