@@ -341,7 +341,7 @@ class SupportMoveOrder extends Order {
    * @param {string} from ID of the starting province of the moving unit.
    */
   constructor(province, supporting, from) {
-    super(orderTypeEnum["support move"], province, `support-${province}-${from}-${to}`);
+    super(orderTypeEnum["support move"], province, `support-${province}-${from}-${supporting}`);
 
     /**
      * The ID of the province being supported and the destination province for the moving (supported) unit.
