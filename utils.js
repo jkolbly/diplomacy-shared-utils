@@ -421,6 +421,14 @@ class GameData {
 
     /** @type {Object.<string,Array.<Order>>} */
     this.orderCache = {};
+
+    for (let gameState of this.history) {
+      for (let nation in gameState.orders) {
+        for (let province in gameState.orders[nation]) {
+          gameState.orders[nation][province] = import_order(gameState.orders[nation][province]);
+        }
+      }
+    }
   }
 
   /**
