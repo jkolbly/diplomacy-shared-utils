@@ -157,6 +157,203 @@ const orderTypeEnum = {
  */
 
 /**
+ * A class representing an order for a single unit.
+ * This is an abstract class, use {@link HoldOrder}, {@link MoveOrder}, {@link ConvoyOrder}, {@link SupportHoldOrder}, or {@link SupportMoveOrder} for specific orders.
+ */
+class Order {
+  /**
+   * @param {orderTypeEnum} type 
+   * @param {string} province 
+   * @param {string} id 
+   */
+  constructor (type, province, id) {
+    /**
+     * The type of order, as specified by {@link orderTypeEnum}.
+     * @type {orderTypeEnum}
+     */
+    this.type = type;
+
+    /**
+     * The province ID of the unit being ordered (the starting unit for move orders).
+     * @type {string}
+     */
+    this.province = province;
+
+    /**
+     * A unique string representing this order.
+     * @type {string}
+     */
+    this.id = id;
+  }
+
+  /**
+   * Return whether this order is equal to another by comparing their order ID's.
+   * @param {Order} other 
+   */
+  equals(other) {
+    return this.id == other.id;
+  }
+
+  /**
+   * Get a simplified version of this order that can be sent between the client, server, and SQL server.
+   * @returns {{type:number,unit:string}}
+   */
+  export() {
+    return {
+      type: this.type,
+      unit: this.province
+    };
+  }
+}
+
+/**
+ * Class representing an order to hold.
+ */
+class HoldOrder extends Order {
+  /**
+   * @param {string} province Province ID of holding unit.
+   */
+  constructor(province) {
+    super(orderTypeEnum.hold, province, `hold-${province}`);
+  }
+}
+
+/**
+ * Class representing an order to move.
+ */
+class MoveOrder extends Order {
+  /**
+   * @param {string} province Province ID of moving unit.
+   * @param {string} dest Destination province ID.
+   * @param {string} coast Destination coast ID or "" if unused. Default: "".
+   * @param {boolean} [isConvoy] Whether this move order is an army attempting to cross water. Default: false.
+   */
+  constructor(province, dest, coast="", isConvoy=false) {
+    super(orderTypeEnum.move, province, `move-${province}-${dest}-${coast}${isConvoy ? "-convoy" : ""}`);
+
+    /**
+     * The ID of the destination province.
+     * @type {string}
+     */
+    this.dest = dest;
+
+    /**
+     * The ID of the destination coast or "" for N/A.
+     * @type {string}
+     */
+    this.coast = coast;
+
+    /**
+     * Whether or not this move order is by an army travelling over water via a convoy.
+     * @type {boolean}
+     */
+    this.isConvoy = isConvoy;
+  }
+
+  export() {
+    return {
+      ...super.export(),
+      province: this.dest,
+      coast: this.coast,
+      isconvoy: this.isConvoy
+    };
+  }
+}
+
+/**
+ * Class representing an order to a fleet to convoy an army.
+ */
+class ConvoyOrder extends Order {
+  /**
+   * @param {string} province Province ID of supporting unit.
+   * @param {string} start ID of army starting province.
+   * @param {string} end ID of army destination province.
+   */
+  constructor(province, start, end) {
+    super(orderTypeEnum.convoy, province, `convoy-${province}-${start}-${end}`);
+
+    /**
+     * The ID of the convoyed army's starting province.
+     * @type {string}
+     */
+    this.start = start;
+
+    /**
+     * The ID of the convoyed army's destination province.
+     */
+    this.end = end;
+  }
+
+  export() {
+    return {
+      ...super.export,
+      start: this.start,
+      end: this.end
+    };
+  }
+}
+
+/**
+ * Class representing an order to support a holding unit.
+ */
+class SupportHoldOrder extends Order {
+  /**
+   * @param {string} province Province ID of supporting unit.
+   * @param {string} supporting Province ID of holding unit.
+   */
+  constructor(province, supporting) {
+    super(orderTypeEnum["support hold"], province, `support-${province}-${supporting}`);
+
+    /**
+     * The ID of the province receiving support (presumably a holding unit).
+     * @type {string}
+     */
+    this.supporting = supporting;
+  }
+
+  export() {
+    return {
+      ...super.export,
+      supporting: this.supporting
+    };
+  }
+}
+
+/**
+ * Class representing an order to support a moving unit.
+ */
+class SupportMoveOrder extends Order {
+  /**
+   * @param {string} province Province ID of supporting unit.
+   * @param {string} supporting ID of the province being supported.
+   * @param {string} from ID of the starting province of the moving unit.
+   */
+  constructor(province, supporting, from) {
+    super(orderTypeEnum["support move"], province, `support-${province}-${from}-${to}`);
+
+    /**
+     * The ID of the province being supported and the destination province for the moving (supported) unit.
+     * @type {string}
+     */
+    this.supporting = supporting;
+
+    /**
+     * The ID of the moving (supported) unit's starting province.
+     * @type {string}
+     */
+    this.from = from;
+  }
+
+  export() {
+    return {
+      ...super.export(),
+      supporting: this.supporting,
+      from: this.from
+    };
+  }
+}
+
+/**
  * Information about a game
  */
 class GameData {
