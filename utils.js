@@ -611,11 +611,11 @@ class GameData {
   get_valid_orders(unit) {
     if (!this.orderCache[unit.province])  {
       this.orderCache[unit.province] = [];
-      this.orderCache[unit.province].push(new HoldOrder(unit, this));
-      this.orderCache[unit.province].push(...this.get_adjacencies(unit.province, unit.coast).map(otherSide => new MoveOrder(unit, otherSide, this), this));
+      this.orderCache[unit.province].push(new HoldOrder(unit.province));
+      this.orderCache[unit.province].push(...this.get_adjacencies(unit.province, unit.coast).map(otherSide => new MoveOrder(unit.province, otherSide.province, otherSide.coast, false)));
       if (unit.type == unitTypeEnum.Army) {
         let convoys = this.convoy_pathfind(this.get_province(unit.province));
-        this.orderCache[unit.province].push(...convoys.map(p => new MoveOrder(unit, {province: p, coast: ""}, this, this.fleets_required(unit.province, p).length > 0)));
+        this.orderCache[unit.province].push(...convoys.map(p => new MoveOrder(unit.province, p, "", true)));
       } else if (!unit.coast) {
         let allReachable = this.convoy_pathfind(this.get_province(unit.province));
         for (let start of allReachable) {
@@ -623,18 +623,18 @@ class GameData {
           if (armyUnit && armyUnit.type == unitTypeEnum.Army) {
             let ends = allReachable.slice();
             ends.splice(ends.indexOf(start), 1);
-            this.orderCache[unit.province].push(...ends.map(end => new ConvoyOrder(unit, start, end, this)));
+            this.orderCache[unit.province].push(...ends.map(end => new ConvoyOrder(unit.province, start, end)));
           }
         }
       }
       for (let adj of this.get_adjacencies(unit.province, unit.coast)) {
         let adjUnit = this.get_unit(adj.province);
         if (adjUnit) {
-          this.orderCache[unit.province].push(new SupportHoldOrder(unit, adjUnit, this));
+          this.orderCache[unit.province].push(new SupportHoldOrder(unit.province, adjUnit.province));
         }
         let movableTo = this.get_units_movable_to(adj.province, unit.province);
         for (let other of movableTo) {
-          this.orderCache[unit.province].push(new SupportMoveOrder(unit, other, adj.province, this));
+          this.orderCache[unit.province].push(new SupportMoveOrder(unit.province, adj.province, other.province));
         }
       }
       this.orderCache[unit.province].sort((a, b) => { return (a.text < b.text) ? -1 : (b.text < a.text) ? 1 : 0 });
