@@ -298,7 +298,7 @@ class ConvoyOrder extends Order {
 
   export() {
     return {
-      ...super.export,
+      ...super.export(),
       start: this.start,
       end: this.end
     };
