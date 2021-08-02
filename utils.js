@@ -418,6 +418,9 @@ class GameData {
     this.users;
 
     Object.assign(this, json);
+
+    /** @type {Object.<string,Array.<Order>>} */
+    this.orderCache = {};
   }
 
   /**
