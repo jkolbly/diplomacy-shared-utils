@@ -473,9 +473,9 @@ class GameData {
 
     let groups = this.playerConfig.combine;
     groups.forEach(rule => { ungrouped = ungrouped.filter(c => !rule.includes(c)); });
-    groups = groups.concat(ungrouped.map(c => c));
+    groups = groups.concat(ungrouped.map(c => [c]));
   
-    Object.defineProperty(this, "playableCountryGroups", { value: groups.concat(ungrouped.map(c => [c])) });
+    Object.defineProperty(this, "playableCountryGroups", { value: groups });
     return this.playableCountryGroups;
   }
 
