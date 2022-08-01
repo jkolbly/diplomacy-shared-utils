@@ -859,6 +859,17 @@ class GameData {
     return null;
   }
 
+  /**
+   * Get a province or return an error if province doesn't exist.
+   * @param {string} id 
+   * @returns 
+   */
+  get_province_or_err(id) {
+    let ret = this.get_province(id);
+    if (ret == null) throw Error(`Unknown province ${id}.`);
+    return ret;
+  }
+
   get_coast(provinceId, coastId) {
     let province = this.get_province(provinceId);
 
