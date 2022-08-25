@@ -504,7 +504,11 @@ class GameData {
   }
 
   supply_center_owner(provinceId) {
-    for (let [_id, country] of Object.entries(this.state.nations)) {
+    return this.supply_center_owner_from_state(provinceId, this.state);
+  }
+
+  supply_center_owner_from_state(provinceId, state) {
+    for (let [_id, country] of Object.entries(state.nations)) {
       if (country.supplyCenters.includes(provinceId)) {
         return country;
       }
@@ -937,15 +941,6 @@ class GameData {
 
     return null;
   }
-
-  /**
-   * Get the path to the file with path `relpath` relative to the .dipmap file for this map
-   * @param {string} relpath 
-   */
-  path_from_relative(relpath) {
-    return "maps/" + get_dir(this.map) + relpath;
-  }
-
 }
 
 if (typeof(exports) !== "undefined") {
