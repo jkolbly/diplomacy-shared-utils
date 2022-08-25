@@ -744,7 +744,7 @@ class GameData {
     let ret = [];
     for (let route of this.mapInfo.routes) {
       let otherSide = this.route_other_end_ignore_coasts(route, province);
-      if (otherSide) {
+      if (otherSide && !ret.includes(otherSide.province)) {
         ret.push(otherSide.province);
       }
     }
