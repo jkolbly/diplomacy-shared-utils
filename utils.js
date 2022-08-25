@@ -135,7 +135,15 @@ const orderTypeEnum = {
  * @property {Object.<string, Country>} nations
  * @property {Object.<string, Adjustment>} adjustments Disband/build orders for the creating/disbanding phase
  * @property {Object.<string, Object.<string, Order>>} orders Keys are nation id's. Values are objects mapping provinces to selected orders
- * @property {Object.<string, Retreat>} retreats Retreat orders for the retreat phase
+ * @property {Object.<string, Array<Retreat>>} retreats Retreat orders for the retreat phase
+ */
+
+/**
+ * An object containing information about a retreat.
+ * @typedef {Object} Retreat
+ * @property {Unit} unit The unit that is retreating
+ * @property {string} dest The province that the country has ordered the unit retreat to
+ * @property {string} coast The destination coast the unit will retreat to
  */
 
 /**
