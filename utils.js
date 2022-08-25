@@ -933,15 +933,6 @@ class GameData {
 
     return null;
   }
-
-  /**
-   * Get the path to the file with path `relpath` relative to the .dipmap file for this map
-   * @param {string} relpath 
-   */
-  path_from_relative(relpath) {
-    return "maps/" + get_dir(this.map) + relpath;
-  }
-
 }
 
 if (typeof(exports) !== "undefined") {
