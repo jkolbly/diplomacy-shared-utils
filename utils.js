@@ -496,7 +496,11 @@ class GameData {
   }
 
   supply_center_owner(provinceId) {
-    for (let [id, country] of Object.entries(this.state.nations)) {
+    return this.supply_center_owner_from_state(provinceId, this.state);
+  }
+
+  supply_center_owner_from_state(provinceId, state) {
+    for (let [id, country] of Object.entries(state.nations)) {
       if (country.supplyCenters.includes(provinceId)) {
         return country;
       }
