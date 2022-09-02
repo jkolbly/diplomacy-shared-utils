@@ -660,7 +660,7 @@ class GameData {
         if (adjUnit) {
           this.orderCache[unit.province].push(new SupportHoldOrder(unit.province, adjUnit.province));
         }
-        let movableTo = this.get_units_movable_to(adj.province, unit.province);
+        let movableTo = this.get_units_movable_to(adj.province, unit.province, unit.province);
         for (let other of movableTo) {
           this.orderCache[unit.province].push(new SupportMoveOrder(unit.province, adj.province, other.province));
         }
@@ -674,16 +674,17 @@ class GameData {
    * Get all units that are able to move to `province` via a valid move order (convoy or otherwise)
    * @param {string} province 
    * @param {string} [exclude]
+   * @param {string} [convoy_ignore] Optional province that moving units cannot use to convoy through
    * 
    * @returns {Array.<Unit>}
    */
-  get_units_movable_to(province, exclude="") {
+  get_units_movable_to(province, exclude="", convoy_ignore="") {
     let ret = [];
     for (let c in this.state.nations) {
       for (let unit of this.state.nations[c].units) {
         if (unit.province != province && unit.province != exclude) {
           for (let order of this.get_valid_orders(unit)) {
-            if (order.type == orderTypeEnum.move && order.dest == province) {
+            if (order.type == orderTypeEnum.move && order.dest == province && (!order.isConvoy || this.convoy_pathfind(this.get_province(order.province), [convoy_ignore]).includes(province))) {
               ret.push(unit);
               break;
             }
