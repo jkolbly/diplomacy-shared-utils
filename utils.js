@@ -142,6 +142,7 @@ const orderTypeEnum = {
  * An object containing information about a retreat.
  * @typedef {Object} Retreat
  * @property {Unit} unit The unit that is retreating
+ * @property {string} attacker The province of the unit that dislodged this unit
  * @property {string} dest The province that the country has ordered the unit retreat to
  * @property {string} coast The destination coast the unit will retreat to
  */
