@@ -67,6 +67,25 @@ const orderTypeEnum = {
 }
 
 /**
+ * Enum for storing the adjudication result of an order
+ * @readonly
+ * @enum {number}
+ */
+const orderResultEnum = {
+  /** Adjudication has not been conducted yet */
+  unprocessed: -1,
+
+  /** This order failed during adjudication (move bounced, support was cut, etc.) */
+  fail: 0,
+
+  /** This order succeeded during adjudication (move succeeded, support wasn't cut, etc.) */
+  success: 1,
+
+  /** This unit was dislodged during adjudication */
+  dislodged: 2
+}
+
+/**
  * Information about a map alone
  * @typedef {Object} MapInfo
  * @property {Array.<Route>} routes
@@ -192,6 +211,12 @@ class Order {
      * @type {string}
      */
     this.id = id;
+
+    /**
+     * The result of this order.
+     * @type {orderResultEnum}
+     */
+    this.result = orderResultEnum.unprocessed;
   }
 
   /**
@@ -209,7 +234,8 @@ class Order {
   export() {
     return {
       type: this.type,
-      unit: this.province
+      unit: this.province,
+      result: this.result
     };
   }
 }
