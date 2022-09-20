@@ -75,14 +75,17 @@ const orderResultEnum = {
   /** Adjudication has not been conducted yet */
   unprocessed: 0,
 
-  /** This order failed during adjudication (move bounced, support was cut, etc.) */
+  /** This order failed during adjudication (move bounced, support was cut, retreat succeeded, etc.) */
   fail: 1,
 
   /** This order succeeded during adjudication (move succeeded, support wasn't cut, etc.) */
   success: 2,
 
   /** This unit was dislodged during adjudication */
-  dislodged: 3
+  dislodged: 3,
+
+  /** This unit was disbanded during retreat adjudication */
+  disbanded: 4
 }
 
 /**
