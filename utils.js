@@ -155,7 +155,7 @@ const orderResultEnum = {
  * @property {Object.<string, Adjustment>} adjustments Disband/build orders for the creating/disbanding phase
  * @property {Object.<string, Object.<string, Order>>} orders Keys are nation id's. Values are objects mapping provinces to selected orders
  * @property {Object.<string, Array<RetreatOrder>>} retreats Retreat orders for the retreat phase
- * @property {Object.<string, Dislodgement>} dislodgements Dislodgements caused by adjudicating this turn's orders. Empty if orders have not been adjudicated. Maps unit province to dislodgement
+ * @property {Object.<string, Array<Dislodgement>>} dislodgements Dislodgements caused by adjudicating this turn's orders. Empty if orders have not been adjudicated. Maps country to dislodgements
  */
 
 /**
