@@ -745,7 +745,7 @@ class GameData {
    * @returns {Array<RetreatOrder>} All valid retreat orders for the unit at `province`
    */
   get_valid_retreats(dislodgement) {
-    return this.get_adjacencies(dislodgement.unit.province, dislodgement.unit.coast).filter(p => p.province != dislodgement.from).map(p => new RetreatOrder(dislodgement.unit.province, p.province, p.coast));
+    return this.get_adjacencies(dislodgement.unit.province, dislodgement.unit.coast).filter(p => p.province != dislodgement.from && !this.get_unit(p.province)).map(p => new RetreatOrder(dislodgement.unit.province, p.province, p.coast));
   }
 
   /**
