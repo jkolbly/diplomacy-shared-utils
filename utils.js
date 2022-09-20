@@ -161,7 +161,7 @@ const orderResultEnum = {
 /**
  * An object containing information about a dislodgement.
  * @typedef {Object} Dislodgement
- * @property {string} unit The province of the unit that is dislodged
+ * @property {Unit} unit The unit that is dislodged
  * @property {string} from The province from which the successful attacking move originated
  */
 
