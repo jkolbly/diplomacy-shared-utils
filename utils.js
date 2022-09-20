@@ -740,6 +740,15 @@ class GameData {
   }
 
   /**
+   * Get all valid retreat orders for a dislodgement
+   * @param {Dislodgement} dislodgement The dislodgement object that the retreats are for
+   * @returns {Array<RetreatOrder>} All valid retreat orders for the unit at `province`
+   */
+  get_valid_retreats(dislodgement) {
+    return this.get_adjacencies(dislodgement.unit.province, dislodgement.unit.coast).filter(p => p.province != dislodgement.from).map(p => new RetreatOrder(dislodgement.unit.province, p.province, p.coast));
+  }
+
+  /**
    * Get all units that are able to move to `province` via a valid move order (convoy or otherwise)
    * @param {string} province 
    * @param {string} [exclude]
