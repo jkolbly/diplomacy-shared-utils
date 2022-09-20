@@ -405,6 +405,42 @@ class SupportMoveOrder extends Order {
 }
 
 /**
+ * Class representing an order to make a unit retreat.
+ */
+class RetreatOrder extends Order {
+  /**
+   * 
+   * @param {string} province Province ID of the retreating unit.
+   * @param {string} dest Province ID to retreat to.
+   * @param {string} coast Destination coast or "" if unused. Default: "".
+   * @param {number} [result] The adjudication result of this order.
+   */
+  constructor(province, dest, coast="") {
+    super(orderTypeEnum.retreat, province, `retreat-${province}-${dest}-${coast}`);
+
+    /**
+     * The province ID to retreat to.
+     * @type {string}
+     */
+    this.dest = dest;
+
+    /**
+     * The coast to retreat to or "" if N/A.
+     * @type {string}
+     */
+    this.coast = coast;
+  }
+
+  export() {
+    return {
+      unit: this.province,
+      dest: this.dest,
+      coast: this.coast
+    }
+  }
+}
+
+/**
  * Create an {@link Order} object from a simplified order object sent from the client, server, or SQL server.
  * @param {{type:number,unit:string,result:number,province?:string,coast?:string,isconvoy?:boolean,start?:string,end?:string,supporting?:string,from?:string}} imported 
  * @returns {Order}
