@@ -73,16 +73,16 @@ const orderTypeEnum = {
  */
 const orderResultEnum = {
   /** Adjudication has not been conducted yet */
-  unprocessed: -1,
+  unprocessed: 0,
 
   /** This order failed during adjudication (move bounced, support was cut, etc.) */
-  fail: 0,
+  fail: 1,
 
   /** This order succeeded during adjudication (move succeeded, support wasn't cut, etc.) */
-  success: 1,
+  success: 2,
 
   /** This unit was dislodged during adjudication */
-  dislodged: 2
+  dislodged: 3
 }
 
 /**
@@ -192,8 +192,9 @@ class Order {
    * @param {orderTypeEnum} type 
    * @param {string} province 
    * @param {string} id 
+   * @param {number} [result]
    */
-  constructor (type, province, id) {
+  constructor (type, province, id, result=0) {
     /**
      * The type of order, as specified by {@link orderTypeEnum}.
      * @type {orderTypeEnum}
@@ -216,7 +217,7 @@ class Order {
      * The result of this order.
      * @type {orderResultEnum}
      */
-    this.result = orderResultEnum.unprocessed;
+    this.result = result ? result : orderResultEnum.unprocessed;
   }
 
   /**
@@ -258,9 +259,10 @@ class CancelOrder extends Order {
 class HoldOrder extends Order {
   /**
    * @param {string} province Province ID of holding unit.
+   * @param {number} [result] The adjudication result of this order.
    */
-  constructor(province) {
-    super(orderTypeEnum.hold, province, `hold-${province}`);
+  constructor(province, result=0) {
+    super(orderTypeEnum.hold, province, `hold-${province}`, result);
   }
 }
 
@@ -273,9 +275,10 @@ class MoveOrder extends Order {
    * @param {string} dest Destination province ID.
    * @param {string} coast Destination coast ID or "" if unused. Default: "".
    * @param {boolean} [isConvoy] Whether this move order is an army attempting to cross water. Default: false.
+   * @param {number} [result] The adjudication result of this order.
    */
-  constructor(province, dest, coast="", isConvoy=false) {
-    super(orderTypeEnum.move, province, `move-${province}-${dest}-${coast}${isConvoy ? "-convoy" : ""}`);
+  constructor(province, dest, coast="", isConvoy=false, result=0) {
+    super(orderTypeEnum.move, province, `move-${province}-${dest}-${coast}${isConvoy ? "-convoy" : ""}`, result);
 
     /**
      * The ID of the destination province.
@@ -314,9 +317,10 @@ class ConvoyOrder extends Order {
    * @param {string} province Province ID of supporting unit.
    * @param {string} start ID of army starting province.
    * @param {string} end ID of army destination province.
+   * @param {number} [result] The adjudication result of this order.
    */
-  constructor(province, start, end) {
-    super(orderTypeEnum.convoy, province, `convoy-${province}-${start}-${end}`);
+  constructor(province, start, end, result=0) {
+    super(orderTypeEnum.convoy, province, `convoy-${province}-${start}-${end}`, result);
 
     /**
      * The ID of the convoyed army's starting province.
@@ -346,9 +350,10 @@ class SupportHoldOrder extends Order {
   /**
    * @param {string} province Province ID of supporting unit.
    * @param {string} supporting Province ID of holding unit.
+   * @param {number} [result] The adjudication result of this order.
    */
-  constructor(province, supporting) {
-    super(orderTypeEnum["support hold"], province, `support-${province}-${supporting}`);
+  constructor(province, supporting, result=0) {
+    super(orderTypeEnum["support hold"], province, `support-${province}-${supporting}`, result);
 
     /**
      * The ID of the province receiving support (presumably a holding unit).
@@ -373,9 +378,10 @@ class SupportMoveOrder extends Order {
    * @param {string} province Province ID of supporting unit.
    * @param {string} supporting ID of the province being supported.
    * @param {string} from ID of the starting province of the moving unit.
+   * @param {number} [result] The adjudication result of this order.
    */
-  constructor(province, supporting, from) {
-    super(orderTypeEnum["support move"], province, `support-${province}-${from}-${supporting}`);
+  constructor(province, supporting, from, result=0) {
+    super(orderTypeEnum["support move"], province, `support-${province}-${from}-${supporting}`, result);
 
     /**
      * The ID of the province being supported and the destination province for the moving (supported) unit.
@@ -401,7 +407,7 @@ class SupportMoveOrder extends Order {
 
 /**
  * Create an {@link Order} object from a simplified order object sent from the client, server, or SQL server.
- * @param {{type:number,unit:string,province?:string,coast?:string,isconvoy?:boolean,start?:string,end?:string,supporting?:string,from?:string}} imported 
+ * @param {{type:number,unit:string,result:number,province?:string,coast?:string,isconvoy?:boolean,start?:string,end?:string,supporting?:string,from?:string}} imported 
  * @returns {Order}
  */
 function import_order(imported) {
@@ -420,20 +426,20 @@ function import_order(imported) {
       requireKeys(["unit"]);
       return new CancelOrder(imported.unit);
     case orderTypeEnum.hold:
-      requireKeys(["unit"]);
-      return new HoldOrder(imported.unit);
+      requireKeys(["unit", "result"]);
+      return new HoldOrder(imported.unit, imported.result);
     case orderTypeEnum.move:
-      requireKeys(["unit", "province"]);
-      return new MoveOrder(imported.unit, imported.province, keys.includes("coast") ? imported.coast : "", keys.includes("isconvoy") && imported.isconvoy);
+      requireKeys(["unit", "result", "province"]);
+      return new MoveOrder(imported.unit, imported.province, keys.includes("coast") ? imported.coast : "", keys.includes("isconvoy") && imported.isconvoy, imported.result);
     case orderTypeEnum.convoy:
-      requireKeys(["unit", "start", "end"]);
-      return new ConvoyOrder(imported.unit, imported.start, imported.end);
+      requireKeys(["unit", "result", "start", "end"]);
+      return new ConvoyOrder(imported.unit, imported.start, imported.end, imported.result);
     case orderTypeEnum["support hold"]:
-      requireKeys(["unit", "supporting"]);
-      return new SupportHoldOrder(imported.unit, imported.supporting);
+      requireKeys(["unit", "result", "supporting"]);
+      return new SupportHoldOrder(imported.unit, imported.supporting, imported.result);
     case orderTypeEnum["support move"]:
-      requireKeys(["unit", "supporting", "from"]);
-      return new SupportMoveOrder(imported.unit, imported.supporting, imported.from);
+      requireKeys(["unit", "result", "supporting", "from"]);
+      return new SupportMoveOrder(imported.unit, imported.supporting, imported.from, imported.result);
     default:
       throw Error(`${imported.type} is not a valid order type.`);
   }
@@ -978,6 +984,7 @@ if (typeof(exports) !== "undefined") {
   exports.seasonEnum = seasonEnum;
   exports.unitTypeEnum = unitTypeEnum;
   exports.orderTypeEnum = orderTypeEnum;
+  exports.orderResultEnum = orderResultEnum;
   exports.import_order = import_order;
   exports.Order = Order;
   exports.CancelOrder = CancelOrder;
@@ -986,4 +993,5 @@ if (typeof(exports) !== "undefined") {
   exports.ConvoyOrder = ConvoyOrder;
   exports.SupportHoldOrder = SupportHoldOrder;
   exports.SupportMoveOrder = SupportMoveOrder;
+  exports.RetreatOrder = RetreatOrder;
 }
