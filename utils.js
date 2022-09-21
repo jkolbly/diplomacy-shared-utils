@@ -63,7 +63,8 @@ const orderTypeEnum = {
 
   // Creating/Disbanding phase
   disband: 6,
-  build: 7
+  build: 7,
+  pass: 8
 }
 
 /**
@@ -156,6 +157,12 @@ const orderResultEnum = {
  * @property {Object.<string, Object.<string, Order>>} orders Keys are nation id's. Values are objects mapping provinces to selected orders
  * @property {Object.<string, Object.<string, RetreatOrder>>} retreats Retreat orders for the retreat phase. Values map provinces to retreats
  * @property {Object.<string, Dislodgement>} [dislodgements] Dislodgements caused by adjudicating this turn's orders. Not present if orders have not been adjudicated. Maps province id's to dislodgements
+ * @property {Object.<string, Object.<string, AdjustOrder>} adjustments Building/disbanding orders for the end of this turn. Not present if this isn't a Fall turn.
+ */
+
+/**
+ * Abstract type for different adjustment orders
+ * @typedef {BuildOrder | DisbandOrder | PassOrder} AdjustOrder
  */
 
 /**
@@ -437,7 +444,75 @@ class RetreatOrder extends Order {
       ...super.export(),
       dest: this.dest,
       coast: this.coast
-    }
+    };
+  }
+}
+
+/**
+ * Class representing an order to build a unit.
+ */
+ class BuildOrder extends Order {
+  /**
+   * @param {string} province The province to build the unit at.
+   * @param {unitTypeEnum} unitType The type of unit to build.
+   * @param {string} [coast] The coast to build a fleet on. Default: "".
+   */
+  constructor(province, unitType, coast="") {
+    super(orderTypeEnum.build, province, `build-${province}-${unitType}-${coast}`);
+    /**
+     * The type of unit to build.
+     * @type {unitTypeEnum}
+     */
+    this.unitType = unitType;
+
+    /**
+     * The coast to build a fleet on or "" if unapplicable.
+     * @type {string}
+     */
+    this.coast = coast;
+  }
+
+  export() {
+    return {
+      type: this.type,
+      province: this.province,
+      unitType: this.unitType,
+      coast: this.coast
+    };
+  }
+}
+
+/**
+ * Class representing an order to disband a unit.
+ */
+class DisbandOrder extends Order {
+  /**
+   * @param {string} province The province of the unit to disband
+   */
+  constructor(province) {
+    super(orderTypeEnum.disband, province, `disband-${province}`);
+  }
+
+  export() {
+    return {
+      type: this.type,
+      unit: this.province
+    };
+  }
+}
+
+/**
+ * Class representing an order not to build a unit.
+ */
+class PassOrder extends Order {
+  constructor() {
+    super(orderTypeEnum.pass, "", `pass`);
+  }
+
+  export() {
+    return {
+      type: this.type
+    };
   }
 }
 
@@ -479,6 +554,14 @@ function import_order(imported) {
     case orderTypeEnum.retreat:
       requireKeys(["unit", "result", "dest", "coast"]);
       return new RetreatOrder(imported.unit, imported.dest, imported.coast, imported.result);
+    case orderTypeEnum.build:
+      requireKeys(["province", "unitType", "coast"]);
+      return new BuildOrder(imported.province, imported.unitType, imported.coast);
+    case orderTypeEnum.disband:
+      requireKeys(["province"]);
+      return new DisbandOrder(imported.province);
+    case orderTypeEnum.pass:
+      return new PassOrder();
     default:
       throw Error(`${imported.type} is not a valid order type.`);
   }
