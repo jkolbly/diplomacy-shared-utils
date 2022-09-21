@@ -413,11 +413,11 @@ class RetreatOrder extends Order {
   /**
    * @param {string} province Province ID of the retreating unit.
    * @param {string} dest Province ID to retreat to.
-   * @param {string} coast Destination coast or "" if unused. Default: "".
+   * @param {string} [coast] Destination coast or "" if unused. Default: "".
    * @param {number} [result] The adjudication result of this order.
    */
-  constructor(province, dest, coast="") {
-    super(orderTypeEnum.retreat, province, `retreat-${province}-${dest}-${coast}`);
+  constructor(province, dest, coast="", result=0) {
+    super(orderTypeEnum.retreat, province, `retreat-${province}-${dest}-${coast}`, result);
 
     /**
      * The province ID to retreat to.
