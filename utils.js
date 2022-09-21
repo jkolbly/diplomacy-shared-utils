@@ -476,6 +476,9 @@ function import_order(imported) {
     case orderTypeEnum["support move"]:
       requireKeys(["unit", "result", "supporting", "from"]);
       return new SupportMoveOrder(imported.unit, imported.supporting, imported.from, imported.result);
+    case orderTypeEnum.retreat:
+      requireKeys(["unit", "result", "dest", "coast"]);
+      return new RetreatOrder(imported.unit, imported.dest, imported.coast, imported.result);
     default:
       throw Error(`${imported.type} is not a valid order type.`);
   }
