@@ -1020,6 +1020,15 @@ class GameData {
 
     return null;
   }
+
+  /**
+   * Get all supply centers from the map
+   * 
+   * @returns {Array.<Province>}
+   */
+  get_supply_centers() {
+    return this.mapInfo.provinces.filter(province => province.supplyCenter);
+  }
 }
 
 if (typeof(exports) !== "undefined") {
