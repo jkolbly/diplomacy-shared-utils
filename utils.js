@@ -1140,6 +1140,17 @@ class GameData {
   get_supply_centers() {
     return this.mapInfo.provinces.filter(province => province.supplyCenter);
   }
+
+  /**
+   * Get all home supply centers (i.e. starting supply centers) for a country
+   * 
+   * @param {string} country
+   * 
+   * @returns {Array.<string>}
+   */
+  get_home_supply_centers(country) {
+    return this.mapInfo.countries.find(c => c.id == country).supplyCenters;
+  }
 }
 
 if (typeof(exports) !== "undefined") {
