@@ -231,7 +231,7 @@ class Order {
 
   /**
    * Get a simplified version of this order that can be sent between the client, server, and SQL server.
-   * @returns {{type:number,unit:string}}
+   * @returns {{type:number,unit:string,result:number}}
    */
   export() {
     return {
