@@ -1180,4 +1180,7 @@ if (typeof(exports) !== "undefined") {
   exports.SupportHoldOrder = SupportHoldOrder;
   exports.SupportMoveOrder = SupportMoveOrder;
   exports.RetreatOrder = RetreatOrder;
+  exports.BuildOrder = BuildOrder;
+  exports.DisbandOrder = DisbandOrder;
+  exports.PassOrder = PassOrder;
 }
