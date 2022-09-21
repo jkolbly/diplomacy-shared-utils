@@ -483,7 +483,8 @@ class RetreatOrder extends Order {
       type: this.type,
       province: this.province,
       unitType: this.unitType,
-      coast: this.coast
+      coast: this.coast,
+      country: this.country
     };
   }
 }
@@ -509,7 +510,8 @@ class DisbandOrder extends Order {
   export() {
     return {
       type: this.type,
-      unit: this.province
+      unit: this.province,
+      country: this.country
     };
   }
 }
