@@ -173,6 +173,7 @@ const orderResultEnum = {
  * @property {boolean} neutral
  * @property {Array.<string>} supplyCenters
  * @property {Array.<Unit>} units
+ * @property {number} toBuild Number of units to build if positive, number of units to disband if negative. No action needed if zero.
  */
 
 /**
