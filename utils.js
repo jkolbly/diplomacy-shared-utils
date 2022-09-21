@@ -861,6 +861,33 @@ class GameData {
   }
 
   /**
+   * Get all valid build orders for a country, including declining to build a unit
+   * @param {string} country The country doing the building
+   * @returns {Array<RetreatOrder>}
+   */
+  get_valid_build_orders(country) {
+    return this.get_owned_home_supply_centers(country).flatMap(sc => {
+      let province = this.get_province(sc);
+      if (province.coasts) {
+        return province.coasts.map(c => new BuildOrder(country, sc, unitTypeEnum.Fleet, c)).concat(new BuildOrder(country, sc, unitTypeEnum.Army));
+      } else if (province.water) {
+        return [new BuildOrder(country, sc, unitTypeEnum.Fleet)];
+      } else {
+        return [new BuildOrder(country, sc, unitTypeEnum.Army)];
+      }
+    }).concat(new PassOrder(country));
+  }
+
+  /**
+   * Get all valid disband orders for a country
+   * @param {string} country The country doing the disbanding
+   * @returns {Array<DisbandOrder>}
+   */
+  get_valid_disband_orders(country) {
+    return this.state.nations[country].units.map(unit => new DisbandOrder(country, unit.province));
+  }
+
+  /**
    * Get all units that are able to move to `province` via a valid move order (convoy or otherwise)
    * @param {string} province 
    * @param {string} [exclude]
