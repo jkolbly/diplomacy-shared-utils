@@ -434,7 +434,7 @@ class RetreatOrder extends Order {
 
   export() {
     return {
-      unit: this.province,
+      ...super.export(),
       dest: this.dest,
       coast: this.coast
     }
