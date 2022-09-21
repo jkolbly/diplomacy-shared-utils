@@ -453,11 +453,12 @@ class RetreatOrder extends Order {
  */
  class BuildOrder extends Order {
   /**
+   * @param {string} country The country building the unit.
    * @param {string} province The province to build the unit at.
    * @param {unitTypeEnum} unitType The type of unit to build.
    * @param {string} [coast] The coast to build a fleet on. Default: "".
    */
-  constructor(province, unitType, coast="") {
+  constructor(country, province, unitType, coast="") {
     super(orderTypeEnum.build, province, `build-${province}-${unitType}-${coast}`);
     /**
      * The type of unit to build.
@@ -470,6 +471,12 @@ class RetreatOrder extends Order {
      * @type {string}
      */
     this.coast = coast;
+
+    /**
+     * The country building the unit.
+     * @type {string}
+     */
+    this.country = country;
   }
 
   export() {
@@ -487,10 +494,17 @@ class RetreatOrder extends Order {
  */
 class DisbandOrder extends Order {
   /**
-   * @param {string} province The province of the unit to disband
+   * @param {string} country The country disbanding the unit.
+   * @param {string} province The province of the unit to disband.
    */
-  constructor(province) {
+  constructor(country, province) {
     super(orderTypeEnum.disband, province, `disband-${province}`);
+
+    /**
+     * The country disbanding the unit.
+     * @type {string}
+     */
+    this.country = country;
   }
 
   export() {
@@ -505,13 +519,23 @@ class DisbandOrder extends Order {
  * Class representing an order not to build a unit.
  */
 class PassOrder extends Order {
-  constructor() {
+  /**
+   * @param {string} country The country that's passing on its build step.
+   */
+  constructor(country) {
     super(orderTypeEnum.pass, "", `pass`);
+
+    /**
+     * The country that's passing on its build step.
+     * @type {string}
+     */
+    this.country = country;
   }
 
   export() {
     return {
-      type: this.type
+      type: this.type,
+      country: this.country
     };
   }
 }
@@ -555,13 +579,14 @@ function import_order(imported) {
       requireKeys(["unit", "result", "dest", "coast"]);
       return new RetreatOrder(imported.unit, imported.dest, imported.coast, imported.result);
     case orderTypeEnum.build:
-      requireKeys(["province", "unitType", "coast"]);
-      return new BuildOrder(imported.province, imported.unitType, imported.coast);
+      requireKeys(["country", "province", "unitType", "coast"]);
+      return new BuildOrder(imported.country, imported.province, imported.unitType, imported.coast);
     case orderTypeEnum.disband:
-      requireKeys(["province"]);
-      return new DisbandOrder(imported.province);
+      requireKeys(["country", "province"]);
+      return new DisbandOrder(imported.country, imported.province);
     case orderTypeEnum.pass:
-      return new PassOrder();
+      requireKeys(["country"]);
+      return new PassOrder(imported.country);
     default:
       throw Error(`${imported.type} is not a valid order type.`);
   }
