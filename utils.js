@@ -157,7 +157,7 @@ const orderResultEnum = {
  * @property {Object.<string, Object.<string, Order>>} orders Keys are nation id's. Values are objects mapping provinces to selected orders
  * @property {Object.<string, Object.<string, RetreatOrder>>} retreats Retreat orders for the retreat phase. Values map provinces to retreats
  * @property {Object.<string, Dislodgement>} [dislodgements] Dislodgements caused by adjudicating this turn's orders. Not present if orders have not been adjudicated. Maps province id's to dislodgements
- * @property {Object.<string, Object.<string, AdjustOrder>} adjustments Building/disbanding orders for the end of this turn. Not present if this isn't a Fall turn.
+ * @property {Object.<string, Object.<string, AdjustOrder>} [adjustments] Building/disbanding orders for the end of this turn. Not present if this isn't a Fall turn.
  */
 
 /**
