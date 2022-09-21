@@ -1151,6 +1151,17 @@ class GameData {
   get_home_supply_centers(country) {
     return this.mapInfo.countries.find(c => c.id == country).supplyCenters;
   }
+
+  /**
+   * Get all home supply centers (i.e. starting supply centers) for a country that are still owned by that country
+   * 
+   * @param {string} country
+   * 
+   * @returns {Array.<string>}
+   */
+  get_owned_home_supply_centers(country) {
+    return this.get_home_supply_centers(country).filter(sc => this.state.nations[country].supplyCenters.includes(sc));
+  }
 }
 
 if (typeof(exports) !== "undefined") {
