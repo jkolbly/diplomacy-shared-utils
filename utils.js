@@ -869,7 +869,7 @@ class GameData {
     return this.get_owned_home_supply_centers(country).flatMap(sc => {
       let province = this.get_province(sc);
       if (province.coasts) {
-        return province.coasts.map(c => new BuildOrder(country, sc, unitTypeEnum.Fleet, c)).concat(new BuildOrder(country, sc, unitTypeEnum.Army));
+        return province.coasts.map(c => new BuildOrder(country, sc, unitTypeEnum.Fleet, c.id)).concat(new BuildOrder(country, sc, unitTypeEnum.Army));
       } else if (province.water) {
         return [new BuildOrder(country, sc, unitTypeEnum.Fleet)];
       } else {
