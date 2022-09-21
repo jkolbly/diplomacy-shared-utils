@@ -411,7 +411,6 @@ class SupportMoveOrder extends Order {
  */
 class RetreatOrder extends Order {
   /**
-   * 
    * @param {string} province Province ID of the retreating unit.
    * @param {string} dest Province ID to retreat to.
    * @param {string} coast Destination coast or "" if unused. Default: "".
