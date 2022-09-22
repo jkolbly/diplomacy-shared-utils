@@ -155,6 +155,7 @@ const orderResultEnum = {
  * @property {Object.<string, Country>} nations
  * @property {Object.<string, Object.<string, Order>>} orders Keys are nation id's. Values are objects mapping provinces to selected orders
  * @property {Object.<string, Object.<string, RetreatOrder>>} retreats Retreat orders for the retreat phase. Values map provinces to retreats
+ * @property {Array<string>} [contested] List of provinces (as ID's) that were left empty by units bouncing while adjudicating this turn's order. Not present if adjudication has not occurred yet
  * @property {Object.<string, Dislodgement>} [dislodgements] Dislodgements caused by adjudicating this turn's orders. Not present if orders have not been adjudicated. Maps province id's to dislodgements
  * @property {Object.<string, Array<AdjustOrder>>} [adjustments] Building/disbanding orders for the end of this turn. Not present if this isn't a Fall turn.
  */
@@ -857,7 +858,8 @@ class GameData {
    * @returns {Array<RetreatOrder>} All valid retreat orders for the unit at `province`
    */
   get_valid_retreats(dislodgement) {
-    return this.get_adjacencies(dislodgement.unit.province, dislodgement.unit.coast).filter(p => p.province != dislodgement.from && !this.get_unit(p.province)).map(p => new RetreatOrder(dislodgement.unit.province, p.province, p.coast));
+    let contested = this.history[this.history.length - 2].contested;
+    return this.get_adjacencies(dislodgement.unit.province, dislodgement.unit.coast).filter(p => p.province != dislodgement.from && !contested.includes(p.province) && !this.get_unit(p.province)).map(p => new RetreatOrder(dislodgement.unit.province, p.province, p.coast));
   }
 
   /**
