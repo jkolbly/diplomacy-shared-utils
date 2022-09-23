@@ -868,7 +868,7 @@ class GameData {
    * @returns {Array<RetreatOrder>}
    */
   get_valid_build_orders(country) {
-    return this.get_owned_home_supply_centers(country).flatMap(sc => {
+    return this.get_owned_home_supply_centers(country).filter(sc => !this.get_unit(sc)).flatMap(sc => {
       let province = this.get_province(sc);
       if (province.coasts) {
         return province.coasts.map(c => new BuildOrder(country, sc, unitTypeEnum.Fleet, c.id)).concat(new BuildOrder(country, sc, unitTypeEnum.Army));
