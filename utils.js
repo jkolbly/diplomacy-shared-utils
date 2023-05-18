@@ -782,6 +782,15 @@ class GameData {
   }
 
   /**
+   * Get the country group controlled by `username`.
+   * @param {string} username 
+   * @returns {string[]}
+   */
+  get_player_country_group(username) {
+    return this.playableCountryGroups.find(group => this.country_group_owner(group) == username);
+  }
+
+  /**
    * Get the submitted orders for a given player.
    * 
    * @param {string} user
@@ -1151,7 +1160,19 @@ class GameData {
    * @returns {Unit} The unit
    */
   get_unit(province) {
-    for (let countryData of Object.values(this.state.nations)) {
+    return this.get_unit_state(this.state, province);
+  }
+
+  /**
+   * Get the object representing the unit at `province` during state `state`.
+   * 
+   * @param {State} state The state object
+   * @param {string} province The location of the unit
+   * 
+   * @returns {Unit} The unit
+   */
+  get_unit_state(state, province) {
+    for (let countryData of Object.values(state.nations)) {
       for (let unit of countryData.units) {
         if (unit.province === province) {
           return unit;
@@ -1160,6 +1181,10 @@ class GameData {
     }
 
     return null;
+  }
+
+  get_player_units(player) {
+    return Object.entries(this.state.nations).filter(([c, _]) => this.players[c] == player).flatMap(([_, country]) => country.units);
   }
 
   /**
@@ -1194,24 +1219,24 @@ class GameData {
   }
 }
 
-if (typeof(exports) !== "undefined") {
-  exports.GameData = GameData;
-  exports.winStateEnum = winStateEnum;
-  exports.phaseEnum = phaseEnum;
-  exports.seasonEnum = seasonEnum;
-  exports.unitTypeEnum = unitTypeEnum;
-  exports.orderTypeEnum = orderTypeEnum;
-  exports.orderResultEnum = orderResultEnum;
-  exports.import_order = import_order;
-  exports.Order = Order;
-  exports.CancelOrder = CancelOrder;
-  exports.HoldOrder = HoldOrder;
-  exports.MoveOrder = MoveOrder;
-  exports.ConvoyOrder = ConvoyOrder;
-  exports.SupportHoldOrder = SupportHoldOrder;
-  exports.SupportMoveOrder = SupportMoveOrder;
-  exports.RetreatOrder = RetreatOrder;
-  exports.BuildOrder = BuildOrder;
-  exports.DisbandOrder = DisbandOrder;
-  exports.PassOrder = PassOrder;
-}
+// if (typeof(exports) !== "undefined") {
+//   exports.GameData = GameData;
+//   exports.winStateEnum = winStateEnum;
+//   exports.phaseEnum = phaseEnum;
+//   exports.seasonEnum = seasonEnum;
+//   exports.unitTypeEnum = unitTypeEnum;
+//   exports.orderTypeEnum = orderTypeEnum;
+//   exports.orderResultEnum = orderResultEnum;
+//   exports.import_order = import_order;
+//   exports.Order = Order;
+//   exports.CancelOrder = CancelOrder;
+//   exports.HoldOrder = HoldOrder;
+//   exports.MoveOrder = MoveOrder;
+//   exports.ConvoyOrder = ConvoyOrder;
+//   exports.SupportHoldOrder = SupportHoldOrder;
+//   exports.SupportMoveOrder = SupportMoveOrder;
+//   exports.RetreatOrder = RetreatOrder;
+//   exports.BuildOrder = BuildOrder;
+//   exports.DisbandOrder = DisbandOrder;
+//   exports.PassOrder = PassOrder;
+// }
