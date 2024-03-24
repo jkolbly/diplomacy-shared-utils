@@ -202,7 +202,7 @@ class Order {
    * @param {string} id 
    * @param {number} [result]
    */
-  constructor (type, province, id, result=0) {
+  constructor(type, province, id, result = 0) {
     /**
      * The type of order, as specified by {@link orderTypeEnum}.
      * @type {orderTypeEnum}
@@ -269,7 +269,7 @@ class HoldOrder extends Order {
    * @param {string} province Province ID of holding unit.
    * @param {number} [result] The adjudication result of this order.
    */
-  constructor(province, result=0) {
+  constructor(province, result = 0) {
     super(orderTypeEnum.hold, province, `hold-${province}`, result);
   }
 }
@@ -285,7 +285,7 @@ class MoveOrder extends Order {
    * @param {boolean} [isConvoy] Whether this move order is an army attempting to cross water. Default: false.
    * @param {number} [result] The adjudication result of this order.
    */
-  constructor(province, dest, coast="", isConvoy=false, result=0) {
+  constructor(province, dest, coast = "", isConvoy = false, result = 0) {
     super(orderTypeEnum.move, province, `move-${province}-${dest}-${coast}${isConvoy ? "-convoy" : ""}`, result);
 
     /**
@@ -327,7 +327,7 @@ class ConvoyOrder extends Order {
    * @param {string} end ID of army destination province.
    * @param {number} [result] The adjudication result of this order.
    */
-  constructor(province, start, end, result=0) {
+  constructor(province, start, end, result = 0) {
     super(orderTypeEnum.convoy, province, `convoy-${province}-${start}-${end}`, result);
 
     /**
@@ -360,7 +360,7 @@ class SupportHoldOrder extends Order {
    * @param {string} supporting Province ID of holding unit.
    * @param {number} [result] The adjudication result of this order.
    */
-  constructor(province, supporting, result=0) {
+  constructor(province, supporting, result = 0) {
     super(orderTypeEnum["support hold"], province, `support-${province}-${supporting}`, result);
 
     /**
@@ -388,7 +388,7 @@ class SupportMoveOrder extends Order {
    * @param {string} from ID of the starting province of the moving unit.
    * @param {number} [result] The adjudication result of this order.
    */
-  constructor(province, supporting, from, result=0) {
+  constructor(province, supporting, from, result = 0) {
     super(orderTypeEnum["support move"], province, `support-${province}-${from}-${supporting}`, result);
 
     /**
@@ -423,7 +423,7 @@ class RetreatOrder extends Order {
    * @param {string} [coast] Destination coast or "" if unused. Default: "".
    * @param {number} [result] The adjudication result of this order.
    */
-  constructor(province, dest, coast="", result=0) {
+  constructor(province, dest, coast = "", result = 0) {
     super(orderTypeEnum.retreat, province, `retreat-${province}-${dest}-${coast}`, result);
 
     /**
@@ -451,14 +451,14 @@ class RetreatOrder extends Order {
 /**
  * Class representing an order to build a unit.
  */
- class BuildOrder extends Order {
+class BuildOrder extends Order {
   /**
    * @param {string} country The country building the unit.
    * @param {string} province The province to build the unit at.
    * @param {unitTypeEnum} unitType The type of unit to build.
    * @param {string} [coast] The coast to build a fleet on. Default: "".
    */
-  constructor(country, province, unitType, coast="") {
+  constructor(country, province, unitType, coast = "") {
     super(orderTypeEnum.build, province, `build-${province}-${unitType}-${coast}`);
     /**
      * The type of unit to build.
@@ -658,13 +658,13 @@ class GameData {
    * Value gets cached.
    * @type {string[][]}
    */
-  get playableCountryGroups() {  
+  get playableCountryGroups() {
     let ungrouped = this.mapInfo.countries.map(c => c.id).filter(id => !this.playerConfig.eliminate.includes(id));
 
     let groups = this.playerConfig.combine;
     groups.forEach(rule => { ungrouped = ungrouped.filter(c => !rule.includes(c)); });
     groups = groups.concat(ungrouped.map(c => [c]));
-  
+
     Object.defineProperty(this, "playableCountryGroups", { value: groups });
     return this.playableCountryGroups;
   }
@@ -699,11 +699,11 @@ class GameData {
     return null;
   }
 
-  get_coords(provinceId, coastId="") {
+  get_coords(provinceId, coastId = "") {
     for (let province of this.mapInfo.provinces) {
       if (province.id == provinceId) {
         if (coastId === "") {
-          return {  
+          return {
             x: province.x,
             y: province.y
           };
@@ -828,7 +828,7 @@ class GameData {
    * @returns {Array.<Order>} Valid orders for `unit`
    */
   get_valid_orders(unit) {
-    if (!this.orderCache[unit.province])  {
+    if (!this.orderCache[unit.province]) {
       this.orderCache[unit.province] = [];
       this.orderCache[unit.province].push(new HoldOrder(unit.province));
       this.orderCache[unit.province].push(...this.get_adjacencies(unit.province, unit.coast).map(otherSide => new MoveOrder(unit.province, otherSide.province, otherSide.coast, false)));
@@ -906,7 +906,7 @@ class GameData {
    * 
    * @returns {Array.<Unit>}
    */
-  get_units_movable_to(province, exclude="", convoy_ignore="") {
+  get_units_movable_to(province, exclude = "", convoy_ignore = "") {
     let ret = [];
     for (let c in this.state.nations) {
       for (let unit of this.state.nations[c].units) {
@@ -931,7 +931,7 @@ class GameData {
    * 
    * @returns {Array.<string>} ID's of reachable land provinces
    */
-  convoy_pathfind(start_province, ignore=[]) {
+  convoy_pathfind(start_province, ignore = []) {
     let ret = [];
     ignore.push(start_province.id);
     for (let adj of this.get_adjacencies_ignore_coasts(start_province.id)) {
@@ -1054,7 +1054,7 @@ class GameData {
    * 
    * @returns {Array.<PlaceIdentifier>} List of provinces and coasts accessible from `province` and `coast`
    */
-  get_adjacencies(province, coast="") {
+  get_adjacencies(province, coast = "") {
     let ret = [];
     for (let route of this.mapInfo.routes) {
       let otherSide = this.route_other_end(route, province, coast);
@@ -1219,24 +1219,24 @@ class GameData {
   }
 }
 
-// if (typeof(exports) !== "undefined") {
-//   exports.GameData = GameData;
-//   exports.winStateEnum = winStateEnum;
-//   exports.phaseEnum = phaseEnum;
-//   exports.seasonEnum = seasonEnum;
-//   exports.unitTypeEnum = unitTypeEnum;
-//   exports.orderTypeEnum = orderTypeEnum;
-//   exports.orderResultEnum = orderResultEnum;
-//   exports.import_order = import_order;
-//   exports.Order = Order;
-//   exports.CancelOrder = CancelOrder;
-//   exports.HoldOrder = HoldOrder;
-//   exports.MoveOrder = MoveOrder;
-//   exports.ConvoyOrder = ConvoyOrder;
-//   exports.SupportHoldOrder = SupportHoldOrder;
-//   exports.SupportMoveOrder = SupportMoveOrder;
-//   exports.RetreatOrder = RetreatOrder;
-//   exports.BuildOrder = BuildOrder;
-//   exports.DisbandOrder = DisbandOrder;
-//   exports.PassOrder = PassOrder;
-// }
+if (typeof (exports) !== "undefined") {
+  exports.GameData = GameData;
+  exports.winStateEnum = winStateEnum;
+  exports.phaseEnum = phaseEnum;
+  exports.seasonEnum = seasonEnum;
+  exports.unitTypeEnum = unitTypeEnum;
+  exports.orderTypeEnum = orderTypeEnum;
+  exports.orderResultEnum = orderResultEnum;
+  exports.import_order = import_order;
+  exports.Order = Order;
+  exports.CancelOrder = CancelOrder;
+  exports.HoldOrder = HoldOrder;
+  exports.MoveOrder = MoveOrder;
+  exports.ConvoyOrder = ConvoyOrder;
+  exports.SupportHoldOrder = SupportHoldOrder;
+  exports.SupportMoveOrder = SupportMoveOrder;
+  exports.RetreatOrder = RetreatOrder;
+  exports.BuildOrder = BuildOrder;
+  exports.DisbandOrder = DisbandOrder;
+  exports.PassOrder = PassOrder;
+}
